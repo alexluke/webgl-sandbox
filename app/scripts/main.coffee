@@ -1,18 +1,15 @@
 require [
-], ->
+	'WebGL'
+], (WebGL) ->
 	canvas = document.getElementById('glcanvas')
-	gl = null
 
-	#try
-	gl = canvas.getContext('webgl') or canvas.getContext('experimental-webgl')
-	#catch e
+	gl = new WebGL canvas
 
 	if not gl
 		alert 'Cannot init WebGL'
 		return
 
-	gl.clearColor 0.0, 0.0, 0.0, 1.0
-	gl.enable gl.DEPTH_TEST
-	gl.depthFunc gl.LEQUAL
-	gl.clear gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT
-
+	gl.gl.clearColor 0.0, 0.0, 0.0, 1.0
+	gl.gl.enable gl.gl.DEPTH_TEST
+	gl.gl.depthFunc gl.gl.LEQUAL
+	gl.gl.clear gl.gl.COLOR_BUFFER_BIT|gl.gl.DEPTH_BUFFER_BIT
