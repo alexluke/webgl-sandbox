@@ -1,3 +1,8 @@
+requirejs.config
+	shim:
+		'sylvester':
+			exports: ['Matrix', 'Vector']
+
 require [
 	'WebGL'
 ], (WebGL) ->
