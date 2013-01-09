@@ -3,10 +3,10 @@ require [
 ], (WebGL) ->
 	canvas = document.getElementById('glcanvas')
 
-	gl = new WebGL canvas
-
-	if not gl
-		alert 'Cannot init WebGL'
+	try
+		gl = new WebGL canvas
+	catch e
+		alert e
 		return
 
 	gl.gl.clearColor 0.0, 0.0, 0.0, 1.0

@@ -10,5 +10,5 @@ define ->
 			catch e
 
 			if not @gl
-				return null
+				throw 'Cannot init WebGL'
 
