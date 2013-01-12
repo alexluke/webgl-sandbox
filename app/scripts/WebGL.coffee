@@ -18,6 +18,9 @@ define [
             @width = canvas.width
             @height = canvas.height
             @horizAspect = @height / @width
+            @mvMatrixStack = []
+
+            @squareRotation = 0.0
 
             @gl.clearColor 0.0, 0.0, 0.0, 1.0
             @gl.clearDepth 1.0
@@ -109,12 +112,24 @@ define [
             @loadIdentity()
             @mvTranslate [-0.0, 0.0, -6.0]
 
+            @mvPushMatrix()
+            @mvRotate @squareRotation, [1, 0, 0]
+
             @gl.bindBuffer @gl.ARRAY_BUFFER, @squareVerticesBuffer
             @gl.vertexAttribPointer @vertexPositionAttribute, 3, @gl.FLOAT, false, 0, 0
             @gl.bindBuffer @gl.ARRAY_BUFFER, @squareVerticesColorBuffer
             @gl.vertexAttribPointer @vertexColorAttribute, 4, @gl.FLOAT, false, 0, 0
+
             @setMatrixUniforms()
             @gl.drawArrays @gl.TRIANGLE_STRIP, 0, 4
+
+            @mvPopMatrix()
+
+            currentTime = new Date().getTime()
+            if @lastSquareUpdateTime
+                delta = currentTime - @lastSquareUpdateTime
+                @squareRotation += (30 * delta) / 1000.0
+            @lastSquareUpdateTime = currentTime
 
         loadIdentity: ->
             @mvMatrix = Matrix.I 4
@@ -124,6 +139,24 @@ define [
 
         mvTranslate: (v) ->
             @multMatrix Matrix.Translation(Vector.create([v[0], v[1], v[2]])).ensure4x4()
+
+        mvPushMatrix: (m) ->
+            if m
+                @mvMatrixStack.push m.dup()
+                @mvMatrix = m.dup()
+            else
+                @mvMatrixStack.push @mvMatrix.dup()
+
+        mvPopMatrix: ->
+            if not @mvMatrixStack.length
+                throw "Can't pop from an empty matrix stack"
+
+            @mvMatrix = @mvMatrixStack.pop()
+
+        mvRotate: (angle, v) ->
+            inRadians = angle * Math.PI / 180.0
+            m = Matrix.Rotation(inRadians, Vector.create([v[0], v[1], v[2]])).ensure4x4()
+            @multMatrix m
 
         setMatrixUniforms: ->
             pUniform = @gl.getUniformLocation @shaderProgram, 'uPMatrix'
