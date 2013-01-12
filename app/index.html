@@ -8,29 +8,29 @@
         <link rel="stylesheet" href="styles/main.css">
     </head>
     <body>
-	<canvas id="glcanvas" width="640" height="480"></canvas>
+    <canvas id="glcanvas" width="640" height="480"></canvas>
 
-	<script id="shader-fs" type="x-shader/x-fragment">
-		varying lowp vec4 vColor;
+    <script id="shader-fs" type="x-shader/x-fragment">
+        varying lowp vec4 vColor;
 
-		void main(void) {
-			gl_FragColor = vColor;
-		}
-	</script>
-	<script id="shader-vs" type="x-shader/x-vertex">
-		attribute vec3 aVertexPosition;
-		attribute vec4 aVertexColor;
+        void main(void) {
+            gl_FragColor = vColor;
+        }
+    </script>
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec4 aVertexColor;
 
-		uniform mat4 uMVMatrix;
-		uniform mat4 uPMatrix;
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
 
-		varying lowp vec4 vColor;
+        varying lowp vec4 vColor;
 
-		void main(void) {
-			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-			vColor = aVertexColor;
-		}
-	</script>
+        void main(void) {
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            vColor = aVertexColor;
+        }
+    </script>
     <!-- build:js scripts/build.js -->
     <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
     <!-- endbuild -->
